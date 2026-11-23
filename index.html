@@ -47,6 +47,11 @@
         margin: 0;
         padding: 0;
       }
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: clip;
+      }
       html {
         scroll-behavior: smooth;
         background: var(--bg);
@@ -478,14 +483,38 @@
         }
       }
       @media (max-width: 700px) {
-        .eclipse {
-          right: -35vmin;
-          top: 30%;
-          opacity: 0.55;
+        section {
+          padding-inline: 20px;
         }
+        #hero {
+          align-items: center;
+          text-align: center;
+        }
+        #hero h1 {
+          max-width: 100%;
+          font-size: clamp(2.3rem, 10vw, 3.6rem);
+        }
+        #hero h1 div:nth-child(n + 2) {
+          max-width: 100%;
+          margin-inline: auto;
+        }
+        .eclipse {
+          right: 50%;
+          top: 50%;
+          width: 92vmin;
+          height: 92vmin;
+          transform: translate(50%, -50%);
+          opacity: 0.35;
+        }
+        #reasons .r,
         #reasons .r:nth-child(2) {
-          align-self: flex-start;
-          text-align: left;
+          align-self: center;
+          text-align: center;
+          max-width: 28rem;
+        }
+        .btns {
+          width: 100%;
+          max-width: 320px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -795,13 +824,20 @@
         }
         no.textContent = CONFIG.noLabels[tries];
         whisper.textContent = CONFIG.whispers[tries] || "";
-        yesBtn.style.setProperty("--s", 1 + tries * 0.1);
+
+        const scale = Math.min(1.35, 1 + tries * 0.08);
+        yesBtn.style.setProperty("--s", scale);
+
         requestAnimationFrame(() => {
-          const w = no.offsetWidth,
-            h = no.offsetHeight,
-            m = 16;
-          no.style.left = m + Math.random() * (innerWidth - w - 2 * m) + "px";
-          no.style.top = m + Math.random() * (innerHeight - h - 2 * m) + "px";
+          const vw = document.documentElement.clientWidth;
+          const vh = document.documentElement.clientHeight;
+          const w = no.offsetWidth;
+          const h = no.offsetHeight;
+          const m = 16;
+          const maxX = Math.max(m, vw - w - m);
+          const maxY = Math.max(m, vh - h - m);
+          no.style.left = m + Math.random() * (maxX - m) + "px";
+          no.style.top = m + Math.random() * (maxY - m) + "px";
         });
       }
       no.addEventListener("pointerenter", (e) => {
